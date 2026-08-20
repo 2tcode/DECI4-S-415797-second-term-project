@@ -1,0 +1,56 @@
+name: CloudCrafter CI
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set image tag
+        id: version
+        run: echo "tag=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Build and push users
+        uses: docker/build-push-action@v6
+        with:
+          context: ./services/users
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/cloudcrafter-users:${{ steps.version.outputs.tag }}
+
+      - name: Build and push events
+        uses: docker/build-push-action@v6
+        with:
+          context: ./services/events
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/cloudcrafter-events:${{ steps.version.outputs.tag }}
+
+      - name: Build and push tickets
+        uses: docker/build-push-action@v6
+        with:
+          context: ./services/tickets
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/cloudcrafter-tickets:${{ steps.version.outputs.tag }}
+
+      - name: Build and push notifications
+        uses: docker/build-push-action@v6
+        with:
+          context: ./services/notifications
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/cloudcrafter-notifications:${{ steps.version.outputs.tag }}

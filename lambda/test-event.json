@@ -1,0 +1,14 @@
+{
+  "Records": [
+    {
+      "s3": {
+        "bucket": {
+          "name": "cloudcrafter-tickets"
+        },
+        "object": {
+          "key": "trigger-final.pdf"
+        }
+      }
+    }
+  ]
+}

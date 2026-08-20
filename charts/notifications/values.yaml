@@ -1,0 +1,23 @@
+replicas: 1
+
+image:
+  repository: notifications
+  tag: "1.0"
+  pullPolicy: IfNotPresent
+
+ports:
+  container: 3000
+  service: 3000
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+ingress:
+  enabled: true
+  host: cloudcrafter.local
+  path: /notifications
