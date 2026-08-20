@@ -2,6 +2,8 @@ name: CloudCrafter CI
 
 on:
   push:
+    tags:
+    - 'v*.*.*'
   workflow_dispatch:
 
 permissions:
@@ -25,7 +27,7 @@ jobs:
 
       - name: Set image tag
         id: version
-        run: echo "tag=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+        run: echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
 
       - name: Build and push users
         uses: docker/build-push-action@v6
