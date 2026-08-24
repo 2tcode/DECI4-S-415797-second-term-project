@@ -7,8 +7,34 @@ const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
-const PRIVATE_KEY = fs.readFileSync(path.join(__dirname, "private.key"), "utf8");
-const PUBLIC_KEY = fs.readFileSync(path.join(__dirname, "public.key"), "utf8");
+const KEY_DIR = process.env.JWT_KEY_DIR || __dirname;
+let PRIVATE_KEY = fs.readFileSync(
+  path.join(KEY_DIR, "private.key"),
+  "utf8"
+);
+let PUBLIC_KEY = fs.readFileSync(
+  path.join(KEY_DIR, "public.key"),
+  "utf8"
+);
+function reloadKeys() {
+  PRIVATE_KEY = fs.readFileSync(
+    path.join(KEY_DIR, "private.key"),
+    "utf8"
+  );
+  PUBLIC_KEY = fs.readFileSync(
+    path.join(KEY_DIR, "public.key"),
+    "utf8"
+  );
+  console.log("JWT keys reloaded");
+}
+
+setInterval(() => {
+  try {
+    reloadKeys();
+  } catch (err) {
+    console.error("Failed to reload JWT keys:", err.message);
+  }
+}, 5000);
 
 // Demo user store — CloudCrafter is a learning project, this is intentionally in-memory.
 const USERS = [

@@ -4,23 +4,49 @@ metadata:
   name: {{ include "users.fullname" . }}
   labels:
     {{- include "users.labels" . | nindent 4 }}
+
 spec:
   replicas: {{ .Values.replicas }}
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
   selector:
     matchLabels:
       {{- include "users.selectorLabels" . | nindent 6 }}
+
   template:
     metadata:
       labels:
         {{- include "users.selectorLabels" . | nindent 8 }}
+
     spec:
       containers:
         - name: users
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+          env:
+            - name: JWT_KEY_DIR
+              value: /app/keys
+
+          volumeMounts:
+            - name: jwt-keys
+              mountPath: /app/keys
+              readOnly: true
+
           ports:
             - name: http
               containerPort: {{ .Values.ports.container }}
               protocol: TCP
+
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+
+      volumes:
+        - name: jwt-keys
+          secret:
+            secretName: users-jwt-keys
