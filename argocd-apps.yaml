@@ -1,0 +1,98 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cloudcrafter-events
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/2tcode/DECI4-S-415797-second-term-project.git
+    targetRevision: main
+    path: charts/events
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: aws
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cloudcrafter-notifications
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/2tcode/DECI4-S-415797-second-term-project.git
+    targetRevision: main
+    path: charts/notifications
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: aws
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cloudcrafter-tickets
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/2tcode/DECI4-S-415797-second-term-project.git
+    targetRevision: main
+    path: charts/tickets
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: aws
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cloudcrafter-users
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/2tcode/DECI4-S-415797-second-term-project.git
+    targetRevision: main
+    path: charts/users
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: aws
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
