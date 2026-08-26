@@ -105,7 +105,7 @@ git checkout main
 git pull
 
 git tag -a v1.0.x -m "message"
-git push origin v1.0.x
+git push origin refs/tags/v1.0.x
 ```
 ### Step 2: CI pipeline
 1. Commit the git and push to Github
